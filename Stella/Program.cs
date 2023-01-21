@@ -2,6 +2,7 @@
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Net;
 using DSharpPlus.Lavalink;
+using DSharpPlus.SlashCommands;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.EventArgs;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,8 @@ namespace Stella
 
         static async Task MainAsync(string[] args)
         {
+
+
             var token = Environment.GetEnvironmentVariable("STELLA_TOKEN");
 
             var discord = new DiscordClient(new DiscordConfiguration()
@@ -51,9 +54,16 @@ namespace Stella
             };
 
             var lavalink = discord.UseLavalink();
-            //ta reda på hur man fixar så bot svarar i server & inte bara i DM
 
+            var config = new SlashCommandsConfiguration();
+
+            var slashcommands = discord.UseSlashCommands(config);
             discord.UseVoiceNext();
+            slashcommands.RegisterCommands<SlashCommands>(873564790629482516);
+            slashcommands.RegisterCommands<SlashCommands>(111536006364180480);
+            var a = slashcommands.RegisteredCommands;
+
+
             await discord.ConnectAsync();
             await lavalink.ConnectAsync(lavalinkConfig);
             await Task.Delay(-1);
